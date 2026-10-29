@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Street Fight - Pixel Brawl</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <header class="title-card">
+        <p class="eyebrow">NEON DISTRICT // 01:00 AM</p>
+        <h1>STREET FIGHT</h1>
+        <p class="subtitle">Pixel brawl on the last block standing</p>
+      </header>
+
+      <section class="cabinet" aria-label="Street Fight game">
+        <div class="hud">
+          <div class="fighter-stat">
+            <span class="label">PLAYER</span>
+            <div class="health-track"><div id="player-health" class="health player-health"></div></div>
+          </div>
+          <div class="score-box">SCORE <strong id="score">000000</strong></div>
+          <div class="fighter-stat enemy-stat">
+            <span class="label">RIVAL</span>
+            <div class="health-track"><div id="enemy-health" class="health enemy-health"></div></div>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="game" width="960" height="540" aria-label="Playable Street Fight canvas"></canvas>
+          <div id="message" class="message">
+            <strong>READY?</strong>
+            <span>Press ENTER to start the fight</span>
+          </div>
+        </div>
+
+        <div class="controls">
+          <span><kbd>A</kbd><kbd>D</kbd> MOVE</span>
+          <span><kbd>W</kbd> JUMP</span>
+          <span><kbd>J</kbd> PUNCH</span>
+          <span><kbd>K</kbd> KICK</span>
+          <span><kbd>ENTER</kbd> START / RESTART</span>
+        </div>
+      </section>
+      <p class="footer">BEST PLAYED LOUD // 8-BIT HEART, 16-BIT ATTITUDE</p>
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>
