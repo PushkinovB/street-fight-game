@@ -2,9 +2,12 @@
 
 :root {
   color-scheme: dark;
-  --ink: #201d38;
-  --cream: #fff1ca;
-  --hot: #ff477e;
+  --void: #080b19;
+  --panel: #111a31;
+  --panel-light: #1c2b4d;
+  --cream: #eaf5ff;
+  --muted: #8295b8;
+  --hot: #ff3f91;
   --cyan: #3de6e1;
   --yellow: #ffd166;
 }
@@ -14,104 +17,98 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: #17152b;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% -20%, #263c6b 0, transparent 42%),
+    linear-gradient(135deg, #090c1d 0%, #11132a 52%, #1b102d 100%);
   color: var(--cream);
   font-family: "VT323", monospace;
-  image-rendering: pixelated;
 }
 
-body::before {
+body::before, body::after {
   content: "";
   position: fixed;
-  inset: 0;
   pointer-events: none;
-  opacity: 0.13;
+  inset: 0;
+}
+body::before {
+  opacity: .16;
   background: repeating-linear-gradient(0deg, transparent 0 3px, #fff 4px 5px);
   mix-blend-mode: overlay;
 }
-
-.game-shell {
-  width: min(1120px, calc(100% - 32px));
-  margin: 0 auto;
-  padding: 34px 0 24px;
+body::after {
+  background: linear-gradient(90deg, transparent 0 49.8%, rgb(61 230 225 / 6%) 50%, transparent 50.2%);
+  opacity: .25;
 }
 
-.title-card { text-align: center; margin-bottom: 22px; }
-.eyebrow { color: var(--cyan); letter-spacing: 3px; margin: 0 0 9px; font-size: 19px; }
+.game-shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 38px 0 28px; }
+.title-card { position: relative; text-align: center; margin-bottom: 30px; }
+.brand-mark { display: flex; justify-content: center; gap: 7px; height: 15px; margin-bottom: 15px; transform: skew(-25deg); }
+.brand-mark span { width: 42px; background: var(--cyan); box-shadow: 0 0 18px var(--cyan); }
+.brand-mark span:nth-child(2) { background: var(--hot); box-shadow: 0 0 18px var(--hot); }
+.brand-mark span:nth-child(3) { background: var(--yellow); box-shadow: 0 0 18px var(--yellow); }
+.eyebrow { color: var(--cyan); letter-spacing: 4px; margin: 0 0 14px; font-size: 19px; }
 h1 {
   margin: 0;
-  color: var(--hot);
-  font: 42px/1 "Press Start 2P", monospace;
-  text-shadow: 5px 5px 0 #71264e;
+  color: var(--cream);
+  font: 45px/1 "Press Start 2P", monospace;
+  letter-spacing: -3px;
+  text-shadow: 4px 4px 0 #344b75, 0 0 28px rgb(61 230 225 / 35%);
 }
-.subtitle { margin: 15px 0 0; color: var(--yellow); font-size: 22px; }
+h1 em { color: var(--hot); font-style: normal; text-shadow: 4px 4px 0 #762754, 0 0 28px rgb(255 63 145 / 35%); }
+.subtitle { margin: 15px 0 0; color: var(--yellow); font-size: 24px; letter-spacing: 1px; }
 
 .cabinet {
-  padding: 18px;
-  background: #30294f;
-  border: 5px solid #625477;
-  box-shadow: 0 0 0 5px var(--ink), 14px 14px 0 #080817;
+  position: relative;
+  padding: 21px;
+  background: linear-gradient(145deg, rgb(29 44 78 / 95%), rgb(10 15 32 / 98%));
+  border: 1px solid #536a99;
+  box-shadow: 0 0 0 1px #0a1021, 0 24px 0 -7px #070914, 0 32px 55px rgb(0 0 0 / 55%), inset 0 1px 0 rgb(255 255 255 / 14%);
+  transform: perspective(1300px) rotateX(1deg);
 }
-.hud {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: end;
-  gap: 18px;
-  margin: 0 8px 14px;
-}
+.cabinet::before, .cabinet::after { content: ""; position: absolute; z-index: 0; width: 12px; height: 70px; top: 28px; background: var(--hot); box-shadow: 0 0 20px var(--hot); }
+.cabinet::before { left: -7px; }
+.cabinet::after { right: -7px; background: var(--cyan); box-shadow: 0 0 20px var(--cyan); }
+.hud { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 26px; padding: 0 11px 20px; }
 .fighter-stat { min-width: 0; }
-.enemy-stat { text-align: right; }
-.label { display: block; color: var(--yellow); font: 15px "Press Start 2P", monospace; margin-bottom: 8px; }
-.health-track { height: 19px; padding: 3px; background: var(--ink); border: 2px solid #0e0c1a; }
+.fighter-name { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
+.enemy-stat .fighter-name { justify-content: flex-end; }
+.label { color: var(--cream); font: 14px "Press Start 2P", monospace; }
+.avatar-dot { display: block; width: 12px; height: 12px; transform: rotate(45deg); }
+.player-dot { background: var(--cyan); box-shadow: 0 0 13px var(--cyan); }
+.rival-dot { background: var(--hot); box-shadow: 0 0 13px var(--hot); }
+.health-track { height: 22px; padding: 3px; background: #070b17; border: 1px solid #496085; transform: skew(-12deg); box-shadow: inset 0 2px 6px #000; }
 .health { height: 100%; transition: width 0.2s ease; }
-.player-health { background: var(--cyan); width: 100%; }
-.enemy-health { background: var(--hot); width: 100%; margin-left: auto; }
-.score-box { color: var(--yellow); font: 14px "Press Start 2P", monospace; white-space: nowrap; }
-.score-box strong { color: var(--cream); }
+.player-health { background: linear-gradient(90deg, #1ba6bf, var(--cyan)); width: 100%; box-shadow: 0 0 13px rgb(61 230 225 / 65%); }
+.enemy-health { background: linear-gradient(90deg, var(--hot), #ff8a69); width: 100%; margin-left: auto; box-shadow: 0 0 13px rgb(255 63 145 / 65%); }
+.hud-caption { display: block; margin-top: 6px; color: var(--muted); font-size: 17px; letter-spacing: 2px; }
+.enemy-stat .hud-caption { text-align: right; }
+.score-box { display: grid; justify-items: center; gap: 7px; color: var(--yellow); font: 13px "Press Start 2P", monospace; white-space: nowrap; }
+.score-box strong { color: var(--cream); font-size: 17px; }
+.round { color: var(--muted); font-size: 9px; }
 
-.canvas-wrap { position: relative; border: 4px solid var(--ink); background: #121126; }
+.canvas-wrap { position: relative; z-index: 1; overflow: hidden; border: 1px solid #526b9b; background: #090c1c; box-shadow: 0 13px 22px rgb(0 0 0 / 45%), inset 0 0 34px #000; transform: perspective(1000px) rotateX(1deg); }
 canvas { display: block; width: 100%; height: auto; }
-.message {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-content: center;
-  gap: 16px;
-  text-align: center;
-  background: rgb(18 17 38 / 75%);
-  color: var(--cream);
-  font-size: 24px;
-}
-.message strong { color: var(--hot); font: 29px "Press Start 2P", monospace; text-shadow: 3px 3px 0 #71264e; }
+.message { position: absolute; inset: 0; display: grid; place-content: center; gap: 16px; text-align: center; background: rgb(5 8 20 / 78%); backdrop-filter: blur(2px); color: var(--cream); font-size: 25px; }
+.message strong { color: var(--hot); font: 30px "Press Start 2P", monospace; text-shadow: 3px 3px 0 #762754, 0 0 20px var(--hot); }
 .message.hidden { display: none; }
-.controls {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 15px 24px;
-  margin-top: 17px;
-  color: #bfb3d5;
-  font-size: 21px;
-}
-kbd {
-  display: inline-block;
-  min-width: 25px;
-  margin-right: 4px;
-  padding: 2px 6px;
-  color: var(--ink);
-  background: var(--yellow);
-  border-bottom: 3px solid #b66c43;
-  font: 15px "Press Start 2P", monospace;
-}
-.footer { text-align: center; color: #81799f; letter-spacing: 2px; font-size: 18px; }
+.controls { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 13px 22px; padding: 17px 5px 1px; color: var(--muted); font-size: 20px; }
+.control-kicker { color: var(--yellow); font: 11px "Press Start 2P", monospace; letter-spacing: 1px; }
+kbd { display: inline-block; min-width: 27px; margin-right: 4px; padding: 3px 7px; color: var(--void); background: linear-gradient(135deg, #fff09e, var(--yellow)); border: 1px solid #fff3bd; border-bottom: 3px solid #a76e45; box-shadow: 0 3px 0 #080b19; font: 14px "Press Start 2P", monospace; }
+.footer { text-align: center; color: #536687; letter-spacing: 3px; font-size: 18px; }
 
 @media (max-width: 680px) {
-  .game-shell { width: calc(100% - 16px); padding-top: 20px; }
-  h1 { font-size: 25px; }
-  .eyebrow { font-size: 13px; }
-  .hud { gap: 8px; }
-  .score-box, .label { font-size: 10px; }
-  .controls { gap: 8px 12px; font-size: 17px; }
+  .game-shell { width: calc(100% - 14px); padding-top: 22px; }
+  h1 { font-size: 25px; letter-spacing: -2px; }
+  .eyebrow { font-size: 12px; letter-spacing: 2px; }
+  .cabinet { padding: 12px; }
+  .hud { gap: 8px; padding: 0 2px 13px; }
+  .label { font-size: 9px; }
+  .score-box { font-size: 9px; }
+  .score-box strong { font-size: 11px; }
+  .hud-caption { font-size: 13px; }
+  .controls { gap: 8px 11px; font-size: 16px; }
+  .control-kicker { width: 100%; text-align: center; }
   .message { font-size: 19px; }
   .message strong { font-size: 20px; }
 }

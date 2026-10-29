@@ -99,26 +99,62 @@ function draw() {
 
 function drawBackground() {
   const sky = ctx.createLinearGradient(0, 0, 0, H);
-  sky.addColorStop(0, "#29234b"); sky.addColorStop(0.65, "#514069"); sky.addColorStop(1, "#17152b");
+  sky.addColorStop(0, "#09132b"); sky.addColorStop(0.55, "#182c51"); sky.addColorStop(1, "#070b19");
   ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
-  ctx.fillStyle = "#ffd166"; ctx.fillRect(790, 70, 50, 50);
-  ctx.fillStyle = "#35294d"; ctx.fillRect(0, 285, W, ground - 285);
+  drawSkyline();
+  drawNeonSign(110, 150, "NIGHT", "#3de6e1");
+  drawNeonSign(759, 190, "FIGHT", "#ff3f91");
+  ctx.fillStyle = "#ffd166"; ctx.beginPath(); ctx.arc(790, 74, 26, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#f8d78e"; ctx.globalAlpha = .25; ctx.beginPath(); ctx.arc(790, 74, 42, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
+  ctx.fillStyle = "#172543"; ctx.fillRect(0, 285, W, ground - 285);
+  ctx.fillStyle = "#263e68"; ctx.fillRect(0, 347, W, 3);
+  ctx.fillStyle = "#081020"; ctx.fillRect(0, ground, W, H - ground);
+  drawPerspectiveStreet();
+}
+
+function drawSkyline() {
   for (let x = 20; x < W; x += 87) {
     const height = 65 + ((x * 17) % 80);
-    ctx.fillStyle = x % 2 ? "#24203e" : "#2b2347";
+    ctx.fillStyle = x % 2 ? "#0e1b36" : "#122242";
     ctx.fillRect(x, ground - 100 - height, 70, height);
-    ctx.fillStyle = "#ffd166";
+    ctx.fillStyle = x % 2 ? "#3de6e1" : "#ffd166";
+    ctx.globalAlpha = .7;
     for (let wy = ground - 80 - height; wy < ground - 35; wy += 24) if ((x + wy) % 3) ctx.fillRect(x + 14, wy, 9, 8);
+    ctx.globalAlpha = 1;
   }
-  ctx.fillStyle = "#1b192e"; ctx.fillRect(0, ground, W, H - ground);
-  ctx.strokeStyle = "#3e355d"; ctx.lineWidth = 3;
-  for (let x = -H; x < W; x += 80) { ctx.beginPath(); ctx.moveTo(W / 2, ground); ctx.lineTo(x, H); ctx.stroke(); }
-  ctx.strokeStyle = "#ec4b86"; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(0, ground, W, ground); ctx.stroke();
+}
+
+function drawNeonSign(x, y, text, color) {
+  ctx.save();
+  ctx.shadowColor = color; ctx.shadowBlur = 16; ctx.fillStyle = color;
+  ctx.font = "16px 'Press Start 2P'";
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+function drawPerspectiveStreet() {
+  const vanishing = { x: W / 2, y: ground + 8 };
+  ctx.strokeStyle = "#254573"; ctx.lineWidth = 2;
+  for (let x = -W; x < W * 2; x += 70) {
+    ctx.beginPath(); ctx.moveTo(vanishing.x, vanishing.y); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = ground + 14; y < H; y += 28) {
+    ctx.globalAlpha = (y - ground) / H;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = "#ff3f91"; ctx.shadowColor = "#ff3f91"; ctx.shadowBlur = 10; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(0, ground, W, ground); ctx.stroke();
+  ctx.shadowBlur = 0;
 }
 
 function drawShadow(fighter) {
-  ctx.fillStyle = "rgb(5 4 14 / 45%)";
-  ctx.beginPath(); ctx.ellipse(fighter.x + 44, ground + 4, 45, 10, 0, 0, Math.PI * 2); ctx.fill();
+  const lift = Math.max(0, ground - (fighter.y + 107));
+  ctx.save();
+  ctx.fillStyle = "rgb(0 0 0 / 55%)";
+  ctx.globalAlpha = Math.max(.22, 1 - lift / 100);
+  ctx.beginPath(); ctx.ellipse(fighter.x + 44, ground + 4, 45 - lift * .14, 10 - lift * .03, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
 }
 
 function drawFighter(fighter, main, dark) {
@@ -128,11 +164,16 @@ function drawFighter(fighter, main, dark) {
   ctx.save();
   ctx.translate(x + 44, y);
   ctx.scale(flip, 1);
+  ctx.shadowColor = main;
+  ctx.shadowBlur = 10;
   if (fighter.hitFlash) ctx.globalAlpha = 0.55;
   ctx.fillStyle = "#f5b27b"; ctx.fillRect(-15, 0, 30, 30);
   ctx.fillStyle = "#201d38"; ctx.fillRect(-18, -6, 36, 10); ctx.fillRect(-14, -13, 27, 8);
+  ctx.shadowBlur = 0;
   ctx.fillStyle = dark; ctx.fillRect(-29, 29, 58, 52);
   ctx.fillStyle = main; ctx.fillRect(-25, 34, 50, 44);
+  ctx.fillStyle = "rgb(255 255 255 / 15%)"; ctx.fillRect(-25, 34, 8, 44);
+  ctx.fillStyle = "rgb(0 0 0 / 18%)"; ctx.fillRect(17, 34, 8, 44);
   ctx.fillStyle = "#f5b27b"; ctx.fillRect(-34, 37, 10, 28);
   ctx.fillStyle = main; ctx.fillRect(-26, 78, 20, 29); ctx.fillRect(7, 78, 20, 29);
   ctx.fillStyle = "#201d38"; ctx.fillRect(-28, 102, 24, 9); ctx.fillRect(7, 102, 27, 9);
